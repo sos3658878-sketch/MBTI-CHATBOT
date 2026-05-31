@@ -387,6 +387,24 @@ else:
 
         txt_content += "\n당신의 모든 내일을 진심으로 응원합니다. - 심층 분석 챗봇 올림 -"
         
+        # ========== [여기서부터 수정: 화면 UI 전용 출력 코드] ==========
+        # 1. 화면 출력용 텍스트 변환: 웹에서 엔터가 먹히도록 \n을 <br> 태그로 변경
+        ui_text = txt_content.replace('\n', '<br>')
+        
+        # 2. 제목 부분만 콕 집어서 '가운데 정렬 + 글씨 강조' HTML 적용
+        ui_text = ui_text.replace(
+            f"==== {st.session_state.user_name}님을 위한 심층 심리 분석 보고서 ====<br>",
+            f"<div style='text-align: center; font-weight: bold; font-size: 1.1em; color: #1E88E5; margin-bottom: 15px;'>"
+            f"==== {st.session_state.user_name}님을 위한 심층 심리 분석 보고서 ====</div>"
+        )
+        
+        # 3. st.info를 대신할 예쁜 커스텀 박스를 그려서 출력 (다크모드/라이트모드 모두 호환)
+        st.markdown(f"""
+        <div style="background-color: rgba(30, 136, 229, 0.05); padding: 20px; border-radius: 10px; border-left: 5px solid #1E88E5; line-height: 1.6;">
+            {ui_text}
+        </div>
+        """, unsafe_allow_html=True)
+        
         st.info(txt_content)
 
         from datetime import datetime
