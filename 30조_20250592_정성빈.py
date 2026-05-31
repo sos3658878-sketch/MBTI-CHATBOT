@@ -6,12 +6,15 @@ import platform
 import io
 
 # 폰트 설정 (윈도우/맥/웹 호환)
-font_cache_path = '/home/appuser/.cache/matplotlib'
-if os.path.exists(font_cache_path):
+font_cache_dir = os.path.expanduser('~/.cache/matplotlib')
+if os.path.exists(font_cache_dir):
     import shutil
-    shutil.rmtree(font_cache_path)
+    shutil.rmtree(font_cache_dir)
 
-plt.rc('font', family='NanumGothic')
+font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+if os.path.exists(font_path):
+    font_name = fm.FontProperties(fname=font_path).get_name()
+    plt.rc('font', family=font_name)
 plt.rcParams['axes.unicode_minus'] = False
 
 # ================= 상태 관리 (Session State) 초기화 ================= #
