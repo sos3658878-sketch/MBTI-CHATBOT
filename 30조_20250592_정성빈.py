@@ -1,14 +1,17 @@
 import streamlit as st
 import matplotlib.pyplot as plt
-from datetime import datetime
+import matplotlib.font_manager as fm
+import os
+import platform
 import io
 
 # 폰트 설정 (윈도우/맥/웹 호환)
-import platform
-if platform.system() == 'Windows':
-    plt.rcParams['font.family'] = 'Malgun Gothic'
-elif platform.system() == 'Darwin': # Mac
-    plt.rcParams['font.family'] = 'AppleGothic'
+font_cache_path = '/home/appuser/.cache/matplotlib'
+if os.path.exists(font_cache_path):
+    import shutil
+    shutil.rmtree(font_cache_path)
+
+plt.rc('font', family='NanumGothic')
 plt.rcParams['axes.unicode_minus'] = False
 
 # ================= 상태 관리 (Session State) 초기화 ================= #
@@ -34,7 +37,7 @@ st.set_page_config(page_title="MBTI 심층 상담 챗봇", page_icon="🤖", lay
 
 # [Step 0] 로그인(정보 입력) 화면
 if st.session_state.step == 0:
-    st.title("🧠 MBTI 다차원 심층 상담")
+    st.title("🧠 MBTI 기반 심리상담 챗봇")
     st.markdown("당신의 성향을 분석하여 맞춤형 심리 처방전을 발급해 드립니다.")
     
     with st.form("login_form"):
