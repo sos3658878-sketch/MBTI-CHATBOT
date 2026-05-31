@@ -234,6 +234,8 @@ else:
             f"- 스트레스: {scores[0]}점 | 자신감: {scores[1]}점 | 감정 안정성: {scores[2]}점 | 생활만족도: {scores[3]}점\n\n"
             "[전문가의 다차원 맞춤 처방]\n"
         )
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         if scores[0] >= 60 or scores[2] <= 40:
             txt_content += f"현재 [{st.session_state.stress_cause}] 이슈로 다소 지쳐있습니다. {st.session_state.user_mbti} 성향의 책임감을 잠시 내려놓고 온전히 '나'를 위한 휴식을 취하세요."
         else:
@@ -244,11 +246,23 @@ else:
         # 다운로드 버튼 (웹 앱의 하이라이트)
         col1, col2 = st.columns(2)
         with col1:
-            st.download_button(label="📝 처방전 텍스트 다운로드", data=txt_content, file_name=f"처방전_{st.session_state.user_name}.txt", mime="text/plain")
+            st.download_button(
+                label="📝 처방전 텍스트 다운로드", 
+                data=txt_content, 
+                # 2. 파일명에 timestamp 추가
+                file_name=f"처방전_{st.session_state.user_name}_{timestamp}.txt", 
+                mime="text/plain"
+            )
         with col2:
             buf = io.BytesIO()
             fig.savefig(buf, format="png", dpi=300, bbox_inches='tight')
-            st.download_button(label="📉 그래프 이미지 다운로드", data=buf.getvalue(), file_name=f"그래프_{st.session_state.user_name}.png", mime="image/png")
+            st.download_button(
+                label="📉 그래프 이미지 다운로드", 
+                data=buf.getvalue(), 
+                # 3. 파일명에 timestamp 추가
+                file_name=f"그래프_{st.session_state.user_name}_{timestamp}.png", 
+                mime="image/png"
+            )
         
         if st.button("🔄 처음부터 다시 하기"):
             st.session_state.clear()
