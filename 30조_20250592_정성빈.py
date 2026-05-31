@@ -6,16 +6,16 @@ import platform
 import io
 
 # 폰트 설정 (윈도우/맥/웹 호환)
-font_cache_dir = os.path.expanduser('~/.cache/matplotlib')
-if os.path.exists(font_cache_dir):
-    import shutil
-    shutil.rmtree(font_cache_dir)
-
 font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+
+# 폰트가 설치되어 있는지 확인하고 적용
 if os.path.exists(font_path):
     font_name = fm.FontProperties(fname=font_path).get_name()
     plt.rc('font', family=font_name)
-plt.rcParams['axes.unicode_minus'] = False
+    plt.rcParams['axes.unicode_minus'] = False
+else:
+    # 폰트가 없으면 기본 폰트 사용 (한글은 깨지겠지만 에러는 안 남)
+    pass
 
 # ================= 상태 관리 (Session State) 초기화 ================= #
 if 'step' not in st.session_state:
