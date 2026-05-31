@@ -186,10 +186,6 @@ else:
         st.success("🎉 분석이 완료되었습니다!")
         st.subheader("📊 4대 심리 지표 결과")
         
-        # [폰트 경로 설정]
-        font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
-        font_prop = fm.FontProperties(fname=font_path)
-        
         # 웹상에 그래프 그리기
         fig, ax = plt.subplots(figsize=(7, 4.5))
         categories = list(st.session_state.metrics.keys())
