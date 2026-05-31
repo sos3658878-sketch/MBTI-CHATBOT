@@ -1,16 +1,13 @@
-import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
-import os
 import platform
 import io
 
-# 폰트 설정 (윈도우/맥/웹 호환)
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     plt.rcParams['font.family'] = 'Malgun Gothic'
-elif platform.system() == 'Darwin':  # Mac
+elif platform.system() == "Darwin":
     plt.rcParams['font.family'] = 'AppleGothic'
-else:  # Linux
+else:
     plt.rcParams['font.family'] = 'NanumGothic'
 
 plt.rcParams['axes.unicode_minus'] = False
