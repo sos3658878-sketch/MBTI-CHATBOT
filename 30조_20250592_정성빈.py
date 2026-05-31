@@ -179,7 +179,7 @@ else:
             if st.button("3. 영감이 떠오르는 새로운 취미나 관심사를 찾아봅니다."): step7("3. 새로운 관심사 탐색")
             if st.button("4. 알람만 대충 맞춰두고 아무 생각 없이 푹 자면서 충전합니다."): step7("4. 푹 자면서 충전")
 
-elif st.session_state.step == 8: # 최종 처방전 및 그래프 화면
+    elif st.session_state.step == 8: # 최종 처방전 및 그래프 화면
         st.success("🎉 분석이 완료되었습니다!")
         st.subheader("📊 4대 심리 지표 결과")
         
