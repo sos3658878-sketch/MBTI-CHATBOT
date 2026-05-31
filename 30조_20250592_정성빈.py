@@ -1,13 +1,16 @@
+import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import os
 import platform
 import io
 
-if platform.system() == "Windows":
+# 폰트 설정 (윈도우/맥/웹 호환)
+if platform.system() == 'Windows':
     plt.rcParams['font.family'] = 'Malgun Gothic'
-elif platform.system() == "Darwin":
+elif platform.system() == 'Darwin':  # Mac
     plt.rcParams['font.family'] = 'AppleGothic'
-else:
+else:  # Linux
     plt.rcParams['font.family'] = 'NanumGothic'
 
 plt.rcParams['axes.unicode_minus'] = False
@@ -179,6 +182,9 @@ else:
     elif st.session_state.step == 8: # 최종 처방전 및 그래프 화면
         st.success("🎉 분석이 완료되었습니다!")
         st.subheader("📊 4대 심리 지표 결과")
+        
+        st.write("OS:", platform.system())
+        st.write("폰트:", plt.rcParams['font.family'])
         
         # 웹상에 그래프 그리기
         fig, ax = plt.subplots(figsize=(7, 4.5))
