@@ -334,19 +334,59 @@ else:
         st.pyplot(fig)
         
         # 처방전 텍스트 생성
+        mbti = st.session_state.user_mbti
+        cause = st.session_state.stress_cause
+        stress_score = scores[0]
+        stab_score = scores[2]
+        
+        # 1. 처방전 기본 헤더
         txt_content = (
-            f"==== {st.session_state.user_name}님을 위한 다차원 심층 심리 처방전 ====\n"
-            f"▶ 성향(MBTI): {st.session_state.user_mbti}\n"
-            f"▶ 핵심 분석 요인: [{st.session_state.stress_cause}]\n\n"
+            f"==== {st.session_state.user_name}님을 위한 심층 심리 분석 보고서 ====\n"
+            f"▶ 성향(MBTI): {mbti}\n"
+            f"▶ 핵심 심리 자극 요인: [{cause}]\n\n"
             f"[4대 심리 지표 결과]\n"
             f"- 스트레스: {scores[0]}점 | 자신감: {scores[1]}점 | 감정 안정성: {scores[2]}점 | 생활만족도: {scores[3]}점\n\n"
-            "[전문가의 다차원 맞춤 처방]\n"
         )
-        if scores[0] >= 60 or scores[2] <= 40:
-            txt_content += f"현재 [{st.session_state.stress_cause}] 이슈로 다소 지쳐있습니다. {st.session_state.user_mbti} 성향의 책임감을 잠시 내려놓고 온전히 '나'를 위한 휴식을 취하세요."
-        else:
-            txt_content += f"4대 지표가 훌륭하게 균형을 이루고 있습니다. {st.session_state.user_mbti} 성향 특유의 장점을 살려 내일도 긍정적인 하루를 만들어가세요."
+
+        # 2. 전문 심리상담가의 심층 분석 및 맞춤 피드백
+        txt_content += "[👨‍⚕️ 전문 심리상담가의 종합 소견 및 처방]\n"
+        txt_content += f"안녕하세요 {st.session_state.user_name}님. 오늘 남겨주신 마음의 흔적들을 주의 깊게 살펴보았습니다.\n\n"
+
+        if stress_score >= 60 or stab_score <= 40:
+            txt_content += f"현재 '{cause}'(으)로 인해 심리적 피로감이 상당히 누적된 상태이시군요. "
+            txt_content += "우리는 이렇게 스트레스가 높아질 때, 상황을 실제보다 더 부정적으로 해석하게 만드는 '자동적 사고(Automatic Thoughts)'가 스위치처럼 켜지곤 합니다.\n\n"
+
+            # MBTI T/F 성향에 따른 인지적 분석
+            if 'T' in mbti:
+                txt_content += f"특히 {mbti} 성향을 가지신 분들은 이럴 때 통제할 수 없는 변수나 비합리적인 상황을 마주하면, '이걸 완벽하게 해결해야만 해'라는 생각의 틀(인지적 오류)에 스스로를 옭아매기 쉽습니다. "
+            else:
+                txt_content += f"특히 {mbti} 성향을 가지신 분들은 주변의 분위기나 타인의 감정에 민감하여, '이 상황이 나 때문에 벌어진 것은 아닐까?' 하고 책임을 내면화하는 인지적 오류에 빠지기 쉽습니다. "
             
+            txt_content += "지금 느끼는 답답함과 무력감은 당신이 부족해서가 아닙니다. 그만큼 당신이 이 상황을 책임감 있게 잘 해내고 싶어 한다는 반증이라는 점을 꼭 기억해 주셨으면 합니다.\n\n"
+            
+            # MBTI E/I, J/P 성향에 따른 행동 처방
+            txt_content += "💡 [오늘 밤을 위한 구체적 행동 처방]\n"
+            txt_content += "지금 당장 거창한 해결책을 찾으려 애쓰지 마세요. 팽팽하게 당겨진 활시위를 잠시 늦춰야 할 때입니다.\n"
+            
+            if 'E' in mbti:
+                txt_content += "▶ 에너지의 환기: 묵혀둔 감정을 밖으로 꺼내야 합니다. 가벼운 산책을 하거나, 편안한 사람과 일상적인 대화를 나누며 내면의 압력을 외부로 덜어내 보세요.\n"
+            else:
+                txt_content += "▶ 감각의 차단: 외부의 자극을 최소화하고 시각과 청각을 쉬게 해주세요. 조용한 공간에서 복잡한 생각들을 일기에 적어 내려가며, 내 감정을 한 걸음 떨어져서 객관적으로 바라보는 시간이 필요합니다.\n"
+                
+            if 'J' in mbti:
+                txt_content += "▶ 통제감 내려놓기: 내일의 계획표에서 가장 '덜 중요한' 한 가지를 과감히 지워보세요. 100% 완벽하지 않아도, 일상은 생각보다 안전하게 흘러간다는 것을 뇌에 알려주어야 합니다.\n"
+            else:
+                txt_content += "▶ 작은 통제감 회복: 내일은 거창한 계획 대신 '아침에 물 한 잔 마시기' 같은 아주 작은 목표를 세우고 달성해 보세요. 소소한 성취감이 무너진 내면의 질서를 회복시켜 줄 것입니다.\n"
+
+        else:
+            txt_content += f"현재 '{cause}' 요인이 있었음에도 불구하고, {st.session_state.user_name}님의 4대 심리 지표는 매우 건강한 균형을 유지하고 있습니다.\n"
+            txt_content += f"{mbti} 성향 특유의 장점을 발휘하여 스트레스 상황을 자신만의 방식으로 지혜롭게 소화해 내고 계신 모습이 무척 인상 깊습니다.\n\n"
+            txt_content += "마치 단단하게 뿌리내린 나무처럼, 외부의 거센 바람 앞에서도 내면의 중심을 잃지 않고 상황을 유연하게 재해석하는 훌륭한 '회복 탄력성'을 지니고 계시네요.\n\n"
+            txt_content += "💡 [앞으로를 위한 지지 메시지]\n"
+            txt_content += "지금처럼 당신의 마음이 보내는 신호에 귀 기울이고, 스스로를 다독일 줄 아는 건강한 루틴을 계속 유지해 주시기 바랍니다. 때로는 흔들릴 날도 있겠지만, 지금의 단단한 마음 근육이 당신을 든든하게 지켜줄 것입니다.\n"
+
+        txt_content += "\n당신의 모든 내일을 진심으로 응원합니다. - 심층 분석 챗봇 올림 -"
+        
         st.info(txt_content)
 
         from datetime import datetime
