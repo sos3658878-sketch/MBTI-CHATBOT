@@ -1,22 +1,23 @@
 """
 ====================================================================
-프로젝트명 : MBTI 기반 심리상담 챗봇 (Streamlit Web App)
+프로젝트명 : MBTI 기반 다차원 심층 심리상담 챗봇 (Streamlit Web App)
+소속       : 동양미래대학교
 제출자     : 30조 20250592 정성빈
 ====================================================================
 """
 
+import os
+import io
+import platform
+from datetime import datetime
 import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
-import os
-import platform
-import io
-from datetime import datetime
 
 # ================= 1. 초기 환경 및 폰트 설정 ================= #
-st.set_page_config(page_title="MBTI 기반 심리상담 챗봇", page_icon="🤖", layout="centered")
+st.set_page_config(page_title="MBTI 심층 상담 챗봇", page_icon="🤖", layout="centered")
 
-# OS별 한글 폰트 동적 할당 (Windows, Mac, Linux/Streamlit Cloud 대응)
+# OS별 한글 폰트 동적 할당
 if platform.system() == 'Windows':
     plt.rcParams['font.family'] = 'Malgun Gothic'
 elif platform.system() == 'Darwin': 
@@ -36,11 +37,11 @@ if 'step' not in st.session_state:
     st.session_state.chat_history = [] 
 
 def add_msg(role, content):
-    """대화 기록을 세션 상태에 저장하는 헬퍼 함수"""
+    """대화 기록을 세션 상태에 저장"""
     st.session_state.chat_history.append({"role": role, "content": content})
 
 def update_metrics(stress, conf, stab, satis):
-    """4대 심리 지표 점수를 업데이트하고 0~100 사이로 유지하는 헬퍼 함수"""
+    """4대 심리 지표 점수 업데이트 (0~100 구간 제한)"""
     st.session_state.metrics['스트레스'] = max(0, min(100, st.session_state.metrics['스트레스'] + stress))
     st.session_state.metrics['자신감'] = max(0, min(100, st.session_state.metrics['자신감'] + conf))
     st.session_state.metrics['감정 안정성'] = max(0, min(100, st.session_state.metrics['감정 안정성'] + stab))
@@ -76,13 +77,13 @@ if st.session_state.step == 0:
 else:
     st.title(f"💬 {st.session_state.user_name}님의 상담방")
     
-    # 누적된 대화 기록 출력
+    # 누적 대화 기록 렌더링
     for msg in st.session_state.chat_history:
         with st.chat_message(msg["role"]):
             st.write(msg["content"])
 
     def handle_choice(user_text, next_step, cause=None, stress=0, conf=0, stab=0, satis=0, bot_reply=""):
-        """사용자의 선택을 처리하고 다음 단계로 라우팅하는 통합 제어 함수"""
+        """사용자 선택 처리 및 다음 단계 라우팅"""
         add_msg("user", user_text)
         update_metrics(stress, conf, stab, satis)
         if cause:
@@ -93,25 +94,21 @@ else:
         st.rerun()
 
     # ----------------------------------------------------------------------
-    # 단계별 분기 처리 로직 (10단계 심층 분석)
+    # 단계별 심층 분석 시나리오 (총 10단계)
     # ----------------------------------------------------------------------
     if st.session_state.step == 1:
         st.write("---")
         if st.button("1. 에너지가 넘치고 기분이 아주 좋습니다."):
-            reply = "[진단 2/10] 안정적인 편이시군요. 오늘 당신을 가장 편안하거나 즐겁게 만든 요인은 무엇인가요?"
-            handle_choice("1. 에너지가 넘치고 기분이 아주 좋습니다.", 2, None, -15, 10, 10, 15, reply)
+            handle_choice("1. 에너지가 넘치고 기분이 아주 좋습니다.", 2, None, -15, 10, 10, 15, "[진단 2/10] 안정적인 편이시군요. 오늘 당신을 가장 편안하거나 즐겁게 만든 요인은 무엇인가요?")
         if st.button("2. 특별한 일 없이 평범하고 무난하게 보냈습니다."):
-            reply = "[진단 2/10] 무난한 하루였군요. 오늘 당신을 편안하게 만든 요인은 무엇인가요?"
-            handle_choice("2. 특별한 일 없이 평범하고 무난하게 보냈습니다.", 2, None, 0, 0, 5, 5, reply)
+            handle_choice("2. 특별한 일 없이 평범하고 무난하게 보냈습니다.", 2, None, 0, 0, 5, 5, "[진단 2/10] 무난한 하루였군요. 오늘 당신을 편안하게 만든 요인은 무엇인가요?")
         if st.button("3. 에너지가 소진되어 살짝 피곤하고 지칩니다."):
-            reply = "[진단 2/10] 많이 지치셨군요. 오늘 당신의 에너지를 갉아먹은 주된 원인은 무엇인가요?"
-            handle_choice("3. 에너지가 소진되어 살짝 피곤하고 지칩니다.", 3, None, 15, -5, -5, -10, reply)
+            handle_choice("3. 에너지가 소진되어 살짝 피곤하고 지칩니다.", 3, None, 15, -5, -5, -10, "[진단 2/10] 많이 지치셨군요. 오늘 당신의 에너지를 갉아먹은 주된 원인은 무엇인가요?")
         if st.button("4. 완전히 방전되었고 극심한 스트레스를 받습니다."):
-            reply = "[진단 2/10] 세상에, 많이 힘드셨겠어요. 에너지를 가장 많이 갉아먹은 원인은 무엇인가요?"
-            handle_choice("4. 완전히 방전되었고 극심한 스트레스를 받습니다.", 3, None, 30, -10, -15, -20, reply)
+            handle_choice("4. 완전히 방전되었고 극심한 스트레스를 받습니다.", 3, None, 30, -10, -15, -20, "[진단 2/10] 세상에, 많이 힘드셨겠어요. 에너지를 가장 많이 갉아먹은 원인은 무엇인가요?")
 
     elif st.session_state.step == 2:
-        # S(현실주의) vs N(이상주의) 분기
+        # S(감각) vs N(직관) 분기
         st.write("---")
         def step2_choice(txt, cause, stress, conf, stab, satis):
             handle_choice(txt, 3, cause, stress, conf, stab, satis, f"[진단 3/10] '{cause}' 요인이 컸군요. 그렇다면...")
@@ -149,7 +146,7 @@ else:
             if st.button("4. 내 의도와 달리 내가 누군가에게 상처를 주었다는 죄책감이 들 때"): step3_choice("타인에게 상처를 줬다는 자책", 25, -20, -25, -10)
 
     elif st.session_state.step == 4:
-        # 4대 기질별(NF, NT, SJ, SP) 초개인화 심층 진단
+        # 4대 기질별(NF, NT, SJ, SP) 분기
         st.write("---")
         def step4_choice(txt, stress, conf, stab, satis):
             handle_choice(txt, 5, None, stress, conf, stab, satis, "[진단 5/10] 당신의 깊은 내면을 이해했습니다. 이런 복잡한 감정들을 해소하기 위해...")
@@ -185,7 +182,7 @@ else:
             if st.button("4. 몸을 움직이거나 새로운 것을 경험할 수 없는 꽉 막힌 환경"): step4_choice("행동의 제약", 15, -10, -15, -15)
 
     elif st.session_state.step == 5:
-        # E(외향) vs I(내향) 분기 : 스트레스 행동 발현
+        # E(외향) vs I(내향) 분기 : 스트레스 행동 발현 양상
         st.write("---")
         def step5_choice(txt, stress, conf, stab, satis):
             handle_choice(txt, 6, None, stress, conf, stab, satis, "[진단 6/10] 마음의 상태가 행동으로도 나타나고 있군요. 이런 상황에서 당신의 머릿속을 맴도는 생각은 무엇인가요?")
@@ -204,7 +201,7 @@ else:
             if st.button("4. 겉으로는 평온해 보이지만 표정이 굳고 말이 극단적으로 없어집니다."): step5_choice("감정 억압 및 침묵", 15, -5, -20, -5)
 
     elif st.session_state.step == 6:
-        # 인지적 오류 분석 분기
+        # 자동적 사고 및 인지적 오류 분석 분기
         st.write("---")
         def step6_choice(txt, stress, conf, stab, satis):
             handle_choice(txt, 7, None, stress, conf, stab, satis, "[진단 7/10] 스스로에게 조금 가혹하신 편이군요. 지금 당신에게 가장 필요한 것은 무엇일까요?")
@@ -247,7 +244,7 @@ else:
         if st.button("4. 누군가에게 위로를 받거나 상황이 완전히 해결되기 전까진 이어집니다."): step8_choice("타인/상황 의존적", 5, -5, -10, 0)
 
     elif st.session_state.step == 9:
-        # 감정 주도적 해소 방식 분석
+        # 주도적 감정 해소 방식 분석
         st.write("---")
         def step9_choice(txt, stress, conf, stab, satis):
             handle_choice(txt, 10, None, stress, conf, stab, satis, "[마지막 진단 10/10] 훌륭한 대처 방식이군요. 드디어 마지막 질문입니다.")
@@ -270,7 +267,7 @@ else:
             if st.button("4. 내 마음을 가장 잘 알아주는 사람에게 모든 것을 털어놓고 공감 받습니다."): step9_choice("타인의 공감과 위로", -15, 5, 10, 5)
 
     elif st.session_state.step == 10: 
-        # J(판단) vs P(인식) 분기 : 내일을 위한 준비 방식
+        # J(판단) vs P(인식) 분기 : 행동 통제 및 계획성 확인
         st.write("---")
         def step10_choice(txt):
             handle_choice(txt, 11, None, 0, 5, 5, 10, "수고하셨습니다. 총 10단계의 심층 분석이 모두 완료되었습니다. 아래에서 결과를 확인하세요!")
@@ -288,13 +285,13 @@ else:
             if st.button("4. 알람만 대충 맞춰두고 복잡한 생각 없이 일단 푹 자면서 충전합니다."): step10_choice("푹 자면서 충전")
 
     # ==============================================================================
-    # [Step 11] 최종 결과 도출 (그래프 시각화 및 맞춤형 처방전 렌더링)
+    # [Step 11] 최종 분석 결과 시각화 및 처방전 발급 모듈
     # ==============================================================================
     elif st.session_state.step == 11: 
         st.success("🎉 10단계 심층 분석이 완료되었습니다!")
         st.subheader("📊 4대 심리 지표 결과")
         
-        # --- 그래프 생성 및 폰트 경로 매핑 ---
+        # --- 그래프 생성 및 폰트 매핑 ---
         if platform.system() == 'Windows': font_path = 'C:/Windows/Fonts/malgun.ttf'
         elif platform.system() == 'Darwin': font_path = '/System/Library/Fonts/AppleGothic.ttf'
         else: font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
@@ -322,14 +319,14 @@ else:
         
         st.pyplot(fig)
         
-        # --- 맞춤형 처방전 텍스트 알고리즘 ---
+        # --- 심층 심리 분석 처방전 텍스트 알고리즘 ---
         mbti = st.session_state.user_mbti
         cause = st.session_state.stress_cause
         stress_score = scores[0]
         stab_score = scores[2]
         
         txt_content = (
-            f"==== {st.session_state.user_name}님을 위한 심리 분석 보고서 ====\n"
+            f"==== {st.session_state.user_name}님을 위한 심층 심리 분석 보고서 ====\n"
             f"▶ 성향(MBTI): {mbti}\n"
             f"▶ 핵심 심리 자극 요인: [{cause}]\n\n"
             f"[4대 심리 지표 결과]\n"
@@ -372,7 +369,7 @@ else:
 
         txt_content += "\n당신의 모든 내일을 진심으로 응원합니다. - 심리상담 챗봇 올림 -"
         
-        # --- UI 전용 렌더링 (마크다운 적용) ---
+        # --- UI 전용 렌더링 (HTML/Markdown 적용) ---
         ui_text = txt_content.replace('\n', '<br>')
         ui_text = ui_text.replace(
             f"==== {st.session_state.user_name}님을 위한 심층 심리 분석 보고서 ====<br>",
@@ -386,28 +383,25 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-        # --- 산출물 다운로드 & 다시 시작 UI (레이아웃 수정) ---
+        # --- 산출물 다운로드 & 기능 초기화 레이아웃 분할 (비율 7:3) ---
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-        # 화면을 크게 왼쪽(7)과 오른쪽(3) 비율로 나눕니다.
         col_left, col_right = st.columns([7, 3])
         
         with col_left:
-            # 왼쪽 영역을 다시 반으로 나누어 다운로드 버튼 2개를 나란히 배치합니다.
             btn_col1, btn_col2 = st.columns(2)
             with btn_col1:
                 st.download_button(
-                    label="📝 텍스트 다운로드", 
+                    label="📝 처방전 다운로드", 
                     data=txt_content, 
                     file_name=f"처방전_{st.session_state.user_name}_{timestamp}.txt", 
                     mime="text/plain",
-                    use_container_width=True # 버튼을 칸 크기에 맞춰 예쁘게 늘려줍니다.
+                    use_container_width=True
                 )
             with btn_col2:
                 buf = io.BytesIO()
                 fig.savefig(buf, format="png", dpi=300, bbox_inches='tight')
                 st.download_button(
-                    label="📉 이미지 다운로드", 
+                    label="📉 결과 그래프 다운로드", 
                     data=buf.getvalue(), 
                     file_name=f"그래프_{st.session_state.user_name}_{timestamp}.png", 
                     mime="image/png",
@@ -415,7 +409,6 @@ else:
                 )
         
         with col_right:
-            # 오른쪽 끝에 '처음부터 다시 하기' 버튼을 배치합니다.
             if st.button("🔄 처음부터 다시 하기", use_container_width=True):
                 st.session_state.clear()
                 st.rerun()
