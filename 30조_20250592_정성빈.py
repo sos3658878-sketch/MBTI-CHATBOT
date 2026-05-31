@@ -386,27 +386,36 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-        # --- 산출물 다운로드 모듈 ---
+        # --- 산출물 다운로드 & 다시 시작 UI (레이아웃 수정) ---
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        col1, col2 = st.columns(2)
-        with col1:
-            st.download_button(
-                label="📝 처방전 텍스트 다운로드", 
-                data=txt_content, 
-                file_name=f"처방전_{st.session_state.user_name}_{timestamp}.txt", 
-                mime="text/plain"
-            )
-        with col2:
-            buf = io.BytesIO()
-            fig.savefig(buf, format="png", dpi=300, bbox_inches='tight')
-            st.download_button(
-                label="📉 그래프 이미지 다운로드", 
-                data=buf.getvalue(), 
-                file_name=f"그래프_{st.session_state.user_name}_{timestamp}.png", 
-                mime="image/png"
-            )
+        # 화면을 크게 왼쪽(7)과 오른쪽(3) 비율로 나눕니다.
+        col_left, col_right = st.columns([7, 3])
         
-        if st.button("🔄 처음부터 다시 하기"):
-            st.session_state.clear()
-            st.rerun()
+        with col_left:
+            # 왼쪽 영역을 다시 반으로 나누어 다운로드 버튼 2개를 나란히 배치합니다.
+            btn_col1, btn_col2 = st.columns(2)
+            with btn_col1:
+                st.download_button(
+                    label="📝 텍스트 다운로드", 
+                    data=txt_content, 
+                    file_name=f"처방전_{st.session_state.user_name}_{timestamp}.txt", 
+                    mime="text/plain",
+                    use_container_width=True # 버튼을 칸 크기에 맞춰 예쁘게 늘려줍니다.
+                )
+            with btn_col2:
+                buf = io.BytesIO()
+                fig.savefig(buf, format="png", dpi=300, bbox_inches='tight')
+                st.download_button(
+                    label="📉 이미지 다운로드", 
+                    data=buf.getvalue(), 
+                    file_name=f"그래프_{st.session_state.user_name}_{timestamp}.png", 
+                    mime="image/png",
+                    use_container_width=True
+                )
+        
+        with col_right:
+            # 오른쪽 끝에 '처음부터 다시 하기' 버튼을 배치합니다.
+            if st.button("🔄 처음부터 다시 하기", use_container_width=True):
+                st.session_state.clear()
+                st.rerun()
