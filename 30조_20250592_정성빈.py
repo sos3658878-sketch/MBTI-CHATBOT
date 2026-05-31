@@ -181,102 +181,157 @@ else:
             if st.button("3. 내 행동, 시간, 선택을 지나치게 통제하고 간섭하려는 사람들"): step4_choice("간섭과 통제", 25, 0, -20, -10)
             if st.button("4. 몸을 움직이거나 새로운 것을 경험할 수 없는 꽉 막힌 환경"): step4_choice("행동의 제약", 15, -10, -15, -15)
 
+    # ==============================================================================
+    # [Step 5] 신규: E/I 분기 - 스트레스의 행동적/신체적 발현
+    # ==============================================================================
     elif st.session_state.step == 5:
         st.write("---")
-        def step5(txt, stress, conf, stab, satis):
-            reply = "[진단 5/6] 감정의 회복 탄력성을 확인했습니다.\n이런 복잡한 감정들을 해소하기 위해 당신이 주로 취하는 행동은 무엇인가요?"
-            handle_choice(txt, 6, None, stress, conf, stab, satis, reply)
+        def step5_choice(txt, stress, conf, stab, satis):
+            handle_choice(txt, 6, None, stress, conf, stab, satis, "[진단 6/10] 마음의 상태가 행동으로도 나타나고 있군요. 이런 상황에서 당신의 머릿속을 맴도는 생각은 무엇인가요?")
             
-        if st.button("1. 자고 일어나면 금방 훌훌 털어버리는 편입니다."): step5("1. 금방 털어버림", -15, 5, 20, 10)
-        if st.button("2. 하루 이틀 정도는 마음 한구석에 잔상이 남습니다."): step5("2. 며칠 잔상이 남음", 5, 0, 0, 0)
-        if st.button("3. 혼자 있을 때 계속 떠올라 며칠 동안 괴롭고 힘듭니다."): step5("3. 오래 지속되고 괴로움", 15, -10, -15, -10)
-        if st.button("4. 누군가에게 위로를 받기 전까지는 계속 이어집니다."): step5("4. 타인의 위로가 필요함", 5, -5, -10, 0)
+        if 'E' in st.session_state.user_mbti:
+            st.markdown("💬 **[질문 5] 스트레스가 극에 달했을 때, 당신의 겉모습이나 행동은 어떻게 변하나요?**")
+            if st.button("1. 평소보다 말이 많아지거나 목소리가 커지고 예민해집니다."): step5_choice("예민함과 다변", 15, 0, -15, -5)
+            if st.button("2. 충동적으로 돈을 쓰거나 맵고 단 음식을 폭식합니다."): step5_choice("충동적 소비/폭식", 20, -5, -20, -10)
+            if st.button("3. 가만히 있지 못하고 끊임없이 약속을 잡아 사람들을 만납니다."): step5_choice("강박적 관계 추구", 10, -5, -10, -5)
+            if st.button("4. 주변 사람들에게 짜증을 내거나 불만을 털어놓게 됩니다."): step5_choice("짜증과 불만 표출", 20, -10, -15, -10)
+        else:
+            st.markdown("💬 **[질문 5] 스트레스가 극에 달했을 때, 당신의 겉모습이나 행동은 어떻게 변하나요?**")
+            if st.button("1. 식욕이 뚝 떨어지고 온몸에 기운이 빠져 무기력해집니다."): step5_choice("식욕 저하 및 무기력", 20, -10, -20, -10)
+            if st.button("2. 모든 연락을 차단하고 누구와도 말하고 싶지 않아집니다."): step5_choice("연락 두절 및 고립", 15, -5, -15, -5)
+            if st.button("3. 생각만 꼬리를 물고 이어질 뿐, 하루 종일 잠만 자고 싶습니다."): step5_choice("과수면과 생각 과잉", 20, -10, -15, -10)
+            if st.button("4. 겉으로는 평온해 보이지만 표정이 굳고 말이 극단적으로 없어집니다."): step5_choice("감정 억압 및 침묵", 15, -5, -20, -5)
 
-    elif st.session_state.step == 6: # E/I, T/F 분기
+    # ==============================================================================
+    # [Step 6] 신규: T/F 분기 - 스트레스 상황에서의 자기 파괴적 생각
+    # ==============================================================================
+    elif st.session_state.step == 6:
         st.write("---")
-        def step6(txt, stress, conf, stab, satis):
-            reply = "[마지막 진단] 당신만의 훌륭한 대처 방식이군요.\n오늘을 마무리하고 내일을 맞이하기 위해, 지금 당장 하고 싶은 행동은 무엇인가요?"
-            handle_choice(txt, 7, None, stress, conf, stab, satis, reply)
+        def step6_choice(txt, stress, conf, stab, satis):
+            handle_choice(txt, 7, None, stress, conf, stab, satis, "[진단 7/10] 스스로에게 조금 가혹하신 편이군요. 지금 당신에게 가장 필요한 것은 무엇일까요?")
             
-        is_e = 'E' in st.session_state.user_mbti
-        is_t = 'T' in st.session_state.user_mbti
+        if 'T' in st.session_state.user_mbti:
+            st.markdown("💬 **[질문 6] 상황이 힘들 때, 당신이 무의식적으로 스스로를 괴롭히는 생각은 무엇인가요?**")
+            if st.button("1. '내 능력이 부족해서 이런 일도 해결 못하는구나'라는 자책"): step6_choice("능력에 대한 자책", 15, -20, -10, -10)
+            if st.button("2. '처음부터 플랜 B를 완벽하게 세웠어야 했어'라는 후회"): step6_choice("완벽주의적 후회", 10, -10, -15, -5)
+            if st.button("3. '왜 세상 사람들은 이렇게 비합리적이고 비효율적일까?'라는 냉소"): step6_choice("타인에 대한 냉소", 15, 5, -20, -10)
+            if st.button("4. '이 감정에 휘둘려서 이성적으로 판단하지 못하는 내가 싫다'"): step6_choice("감정 동요에 대한 혐오", 20, -15, -15, -10)
+        else:
+            st.markdown("💬 **[질문 6] 상황이 힘들 때, 당신이 무의식적으로 스스로를 괴롭히는 생각은 무엇인가요?**")
+            if st.button("1. '나 때문에 다른 사람들이 피해를 보거나 실망하면 어쩌지?'"): step6_choice("타인에 대한 죄책감", 20, -15, -15, -10)
+            if st.button("2. '결국 아무도 내 진짜 마음이나 상처를 알아주지 않을 거야'"): step6_choice("깊은 고립감과 소외감", 25, -10, -25, -15)
+            if st.button("3. '내가 더 참아내고 희생하면 언젠가는 모든 게 괜찮아지겠지'"): step6_choice("자기 희생적 합리화", 15, -5, -10, -20)
+            if st.button("4. '나는 결국 사랑받지 못하거나 버려질지도 모른다'는 불안감"): step6_choice("애정 결핍적 불안", 25, -20, -25, -15)
+
+    # ==============================================================================
+    # [Step 7] 신규: 공통 - 이상적인 위로와 지지의 형태
+    # ==============================================================================
+    elif st.session_state.step == 7:
+        st.write("---")
+        def step7_choice(txt, stress, conf, stab, satis):
+            handle_choice(txt, 8, None, stress, conf, stab, satis, "[진단 8/10] 당신이 진정으로 원하는 위로를 알겠습니다. 그렇다면 이런 특정한 감정이 찾아왔을 때...")
+            
+        st.markdown("💬 **[질문 7] 지금 당장, 당신의 마음을 가장 편안하게 만들어 줄 수 있는 위로는 무엇인가요?**")
+        if st.button("1. '다 괜찮다, 네 잘못이 아니다'라고 말해주는 따뜻한 포옹과 공감"): step7_choice("따뜻한 공감과 포옹", -15, 10, 20, 10)
+        if st.button("2. 지금의 꼬인 상황을 풀어낼 수 있는 명확하고 현실적인 해결책 제시"): step7_choice("명확한 해결책", -10, 15, 10, 10)
+        if st.button("3. 굳이 내게 뭘 묻지 않고, 맛있는 것을 먹으며 곁에 묵묵히 있어주는 것"): step7_choice("조용한 동행", -15, 5, 15, 15)
+        if st.button("4. 그 누구의 간섭이나 연락도 받지 않는, 완벽하고 절대적인 혼자만의 시간"): step7_choice("완벽한 고립과 휴식", -10, 5, 15, 10)
+
+    # ==============================================================================
+    # [Step 8] 기존 Step 5 이동: 감정의 회복 탄력성 (공통)
+    # ==============================================================================
+    elif st.session_state.step == 8:
+        st.write("---")
+        def step8_choice(txt, stress, conf, stab, satis):
+            handle_choice(txt, 9, None, stress, conf, stab, satis, "[진단 9/10] 감정의 지속성을 확인했습니다. 이제 이 엉킨 마음을 직접 풀어볼 시간입니다.")
+            
+        st.markdown("💬 **[질문 8] 보통 스트레스나 우울감이 한 번 찾아오면, 그 감정은 얼마나 지속되나요?**")
+        if st.button("1. 자고 일어나거나 밥을 먹고 나면 금방 훌훌 털어버리는 편입니다."): step8_choice("금방 털어버림", -15, 5, 20, 10)
+        if st.button("2. 하루 이틀 정도는 마음 한구석에 무거운 잔상이 남습니다."): step8_choice("며칠 잔상이 남음", 5, 0, 0, 0)
+        if st.button("3. 혼자 있을 때 계속 그 상황이 떠올라 며칠 동안 괴롭고 힘듭니다."): step8_choice("오래 지속되고 괴로움", 15, -10, -15, -10)
+        if st.button("4. 누군가에게 위로를 받거나 상황이 완전히 해결되기 전까진 이어집니다."): step8_choice("타인/상황 의존적", 5, -5, -10, 0)
+
+    # ==============================================================================
+    # [Step 9] 기존 Step 6 이동: E/I, T/F 분기 - 주도적 해소 행동
+    # ==============================================================================
+    elif st.session_state.step == 9:
+        st.write("---")
+        def step9_choice(txt, stress, conf, stab, satis):
+            handle_choice(txt, 10, None, stress, conf, stab, satis, "[마지막 진단 10/10] 훌륭한 대처 방식이군요. 드디어 마지막 질문입니다.")
+            
+        st.markdown("💬 **[질문 9] 이 복잡한 감정들을 스스로 해소하기 위해 당신이 '주로 직접 취하는 행동'은 무엇인가요?**")
+        is_e, is_t = 'E' in st.session_state.user_mbti, 'T' in st.session_state.user_mbti
 
         if is_e:
-            if st.button("1. 친구나 지인을 만나 신나게 수다를 떨며 해소합니다."): step6("1. 지인과 수다", -10, 5, 5, 5)
-            if st.button("2. 사람이 많은 곳이나 활기찬 모임에 나가 에너지를 얻습니다."): step6("2. 활기찬 모임 참석", -10, 5, 0, 5)
+            if st.button("1. 친구나 지인을 만나 신나게 수다를 떨며 스트레스를 날려버립니다."): step9_choice("지인과 수다", -10, 5, 5, 5)
+            if st.button("2. 사람이 많은 곳이나 활기찬 모임, 활동적인 스포츠를 즐깁니다."): step9_choice("활동적 모임/스포츠", -10, 5, 0, 5)
         else:
-            if st.button("1. 누구와도 연락하지 않고 온전히 혼자만의 동굴에 들어갑니다."): step6("1. 혼자만의 동굴", -10, 0, 10, 5)
-            if st.button("2. 조용히 집에서 좋아하는 영화를 보거나 음악을 들으며 쉽니다."): step6("2. 집에서 조용한 휴식", -10, 0, 10, 5)
+            if st.button("1. 누구와도 연락하지 않고 온전히 혼자만의 동굴에 깊숙이 들어갑니다."): step9_choice("혼자만의 동굴", -10, 0, 10, 5)
+            if st.button("2. 조용히 집에서 좋아하는 영화나 음악을 감상하며 에너지를 채웁니다."): step9_choice("집에서 조용한 휴식", -10, 0, 10, 5)
             
         if is_t:
-            if st.button("3. 이 감정의 근본적인 원인이 무엇인지 객관적으로 분석합니다."): step6("3. 객관적 원인 분석", 5, 10, 5, 0)
-            if st.button("4. 지금 당장 내가 해결할 수 있는 대안을 찾아 실행합니다."): step6("4. 즉각적인 대안 실행", -5, 15, 10, 5)
+            if st.button("3. 이 감정의 근본적인 원인이 무엇인지 객관적으로 분석하고 정리합니다."): step9_choice("객관적 원인 분석", 5, 10, 5, 0)
+            if st.button("4. 감정에 빠져있기보다, 지금 당장 내가 실행할 수 있는 대안을 찾습니다."): step9_choice("즉각적인 대안 실행", -5, 15, 10, 5)
         else:
-            if st.button("3. 내 감정을 솔직하게 적으며 스스로를 따뜻하게 다독여줍니다."): step6("3. 일기 작성 및 다독임", -10, 0, 15, 5)
-            if st.button("4. 내 마음을 가장 잘 알아주는 사람에게 털어놓고 공감 받습니다."): step6("4. 타인의 공감과 위로", -15, 5, 10, 5)
+            if st.button("3. 내 감정을 일기에 솔직하게 적어 내려가며 스스로를 따뜻하게 다독입니다."): step9_choice("일기 작성 및 다독임", -10, 0, 15, 5)
+            if st.button("4. 내 마음을 가장 잘 알아주는 사람에게 모든 것을 털어놓고 공감 받습니다."): step9_choice("타인의 공감과 위로", -15, 5, 10, 5)
 
-    elif st.session_state.step == 7: # J/P 분기 및 처방 완료 트리거
+    # ==============================================================================
+    # [Step 10] 기존 Step 7 이동: J/P 분기 - 내일을 위한 준비
+    # ==============================================================================
+    elif st.session_state.step == 10: 
         st.write("---")
-        def step7(txt):
-            reply = "수고하셨습니다. 모든 심층 분석이 완료되었습니다. 아래에서 결과를 확인하세요!"
-            handle_choice(txt, 8, None, 0, 5, 5, 10, reply)
+        def step10_choice(txt):
+            handle_choice(txt, 11, None, 0, 5, 5, 10, "수고하셨습니다. 총 10단계의 심층 분석이 모두 완료되었습니다. 아래에서 결과를 확인하세요!")
             
+        st.markdown("💬 **[질문 10] 오늘을 잘 마무리하고 새로운 내일을 맞이하기 위해, 오늘 밤 당장 하고 싶은 행동은 무엇인가요?**")
         if 'J' in st.session_state.user_mbti:
-            if st.button("1. 내일 해야 할 일 리스트(To-do)를 미리 작성해둡니다."): step7("1. To-do 리스트 작성")
-            if st.button("2. 방 청소나 주변 정리를 하면서 주변 상황을 통제합니다."): step7("2. 주변 정리 및 청소")
-            if st.button("3. 평소 매일 지키던 나만의 저녁 루틴(독서 등)을 수행합니다."): step7("3. 저녁 루틴 수행")
-            if st.button("4. 내일 챙길 물건들을 가방에 미리 준비해둡니다."): step7("4. 내일 짐 챙기기")
+            if st.button("1. 내일 해야 할 일 리스트(To-do)를 꼼꼼하게 미리 작성해둡니다."): step10_choice("To-do 리스트 작성")
+            if st.button("2. 방 청소나 주변 정리를 하면서 눈앞의 상황부터 통제합니다."): step10_choice("주변 정리 및 청소")
+            if st.button("3. 평소 매일 지키던 나만의 저녁 루틴(독서, 스트레칭 등)을 수행합니다."): step10_choice("저녁 루틴 수행")
+            if st.button("4. 내일 입을 옷이나 챙길 물건들을 가방에 미리 다 준비해둡니다."): step10_choice("내일 짐 미리 챙기기")
         else:
-            if st.button("1. 내일 일은 내일 생각하고, 당장 가장 끌리는 것을 합니다."): step7("1. 당장 끌리는 일 하기")
-            if st.button("2. 계획 없이 유튜브나 넷플릭스 알고리즘에 몸을 맡깁니다."): step7("2. 알고리즘에 몸 맡기기")
-            if st.button("3. 영감이 떠오르는 새로운 취미나 관심사를 찾아봅니다."): step7("3. 새로운 관심사 탐색")
-            if st.button("4. 알람만 대충 맞춰두고 아무 생각 없이 푹 자면서 충전합니다."): step7("4. 푹 자면서 충전")
+            if st.button("1. 내일 일은 내일 생각하고, 지금 당장 내 마음이 가장 끌리는 것을 합니다."): step10_choice("당장 끌리는 일 하기")
+            if st.button("2. 아무런 계획 없이 유튜브나 넷플릭스 알고리즘에 내 몸을 맡깁니다."): step10_choice("알고리즘에 몸 맡기기")
+            if st.button("3. 갑자기 영감이 떠오르는 새로운 관심사나 정보를 검색해 봅니다."): step10_choice("새로운 관심사 탐색")
+            if st.button("4. 알람만 대충 맞춰두고 복잡한 생각 없이 일단 푹 자면서 충전합니다."): step10_choice("푹 자면서 충전")
 
-    elif st.session_state.step == 8: # 최종 처방전 및 그래프 화면
-        st.success("🎉 분석이 완료되었습니다!")
+    # ==============================================================================
+    # [Step 11] 기존 Step 8 이동: 최종 처방전 및 그래프 출력 화면
+    # ==============================================================================
+    elif st.session_state.step == 11: 
+        # === [이곳에는 기존에 완벽하게 작동했던 "웹상에 그래프 그리기"와 
+        # "다운로드 버튼(timestamp 포함)" 코드를 그대로 두시면 됩니다.] ===
+        st.success("🎉 10단계 심층 분석이 완료되었습니다!")
         st.subheader("📊 4대 심리 지표 결과")
         
-        # ================= [해결 핵심] 폰트 캐시를 무시하고 직접 경로 지정 =================
-        if platform.system() == 'Windows':
-            font_path = 'C:/Windows/Fonts/malgun.ttf'
-        elif platform.system() == 'Darwin':
-            font_path = '/System/Library/Fonts/AppleGothic.ttf'
-        else:
-            # 웹(Streamlit Cloud) 환경에서 packages.txt로 설치된 폰트 경로
-            font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+        # 폰트 경로 등 설정 코드
+        if platform.system() == 'Windows': font_path = 'C:/Windows/Fonts/malgun.ttf'
+        elif platform.system() == 'Darwin': font_path = '/System/Library/Fonts/AppleGothic.ttf'
+        else: font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
             
-        # 폰트 프로퍼티 객체 생성
-        if os.path.exists(font_path):
-            font_prop = fm.FontProperties(fname=font_path)
-        else:
-            font_prop = fm.FontProperties() # 백업용
-        # ==================================================================================
-
-        # 웹상에 그래프 그리기
+        if os.path.exists(font_path): font_prop = fm.FontProperties(fname=font_path)
+        else: font_prop = fm.FontProperties()
+            
         fig, ax = plt.subplots(figsize=(7, 4.5))
         categories = list(st.session_state.metrics.keys())
         scores = list(st.session_state.metrics.values())
         colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A']
         
         bars = ax.bar(categories, scores, color=colors, width=0.5)
-        
-        # 1. 막대 위 점수 텍스트에 폰트 강제 적용
         for bar in bars:
             yval = bar.get_height()
             ax.text(bar.get_x() + bar.get_width()/2, yval + 2, f'{yval}점', 
                     ha='center', va='bottom', fontweight='bold', fontproperties=font_prop)
 
-        # 2. 제목 및 Y축 라벨에 폰트 강제 적용
         ax.set_title(f"{st.session_state.user_name}({st.session_state.user_mbti})님의 심리 지표", pad=15, fontproperties=font_prop)
         ax.set_ylabel("점수 (100점 만점)", fontproperties=font_prop)
         ax.set_ylim(0, 110)
         ax.grid(axis='y', linestyle='--', alpha=0.5)
-        
-        # 3. X축 항목(카테고리) 라벨에 폰트 강제 적용
         ax.set_xticks(range(len(categories)))
         ax.set_xticklabels(categories, fontproperties=font_prop)
         
-        st.pyplot(fig) # 웹 화면에 그래프 출력
+        st.pyplot(fig)
         
         # 처방전 텍스트 생성
         txt_content = (
@@ -287,8 +342,6 @@ else:
             f"- 스트레스: {scores[0]}점 | 자신감: {scores[1]}점 | 감정 안정성: {scores[2]}점 | 생활만족도: {scores[3]}점\n\n"
             "[전문가의 다차원 맞춤 처방]\n"
         )
-        from datetime import datetime
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         if scores[0] >= 60 or scores[2] <= 40:
             txt_content += f"현재 [{st.session_state.stress_cause}] 이슈로 다소 지쳐있습니다. {st.session_state.user_mbti} 성향의 책임감을 잠시 내려놓고 온전히 '나'를 위한 휴식을 취하세요."
         else:
@@ -296,13 +349,14 @@ else:
             
         st.info(txt_content)
 
-        # 다운로드 버튼 (웹 앱의 하이라이트)
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
         col1, col2 = st.columns(2)
         with col1:
             st.download_button(
                 label="📝 처방전 텍스트 다운로드", 
                 data=txt_content, 
-                # 2. 파일명에 timestamp 추가
                 file_name=f"처방전_{st.session_state.user_name}_{timestamp}.txt", 
                 mime="text/plain"
             )
@@ -312,7 +366,6 @@ else:
             st.download_button(
                 label="📉 그래프 이미지 다운로드", 
                 data=buf.getvalue(), 
-                # 3. 파일명에 timestamp 추가
                 file_name=f"그래프_{st.session_state.user_name}_{timestamp}.png", 
                 mime="image/png"
             )
