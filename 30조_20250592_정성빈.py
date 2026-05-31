@@ -179,10 +179,26 @@ else:
             if st.button("3. 영감이 떠오르는 새로운 취미나 관심사를 찾아봅니다."): step7("3. 새로운 관심사 탐색")
             if st.button("4. 알람만 대충 맞춰두고 아무 생각 없이 푹 자면서 충전합니다."): step7("4. 푹 자면서 충전")
 
-    elif st.session_state.step == 8: # 최종 처방전 및 그래프 화면
+elif st.session_state.step == 8: # 최종 처방전 및 그래프 화면
         st.success("🎉 분석이 완료되었습니다!")
         st.subheader("📊 4대 심리 지표 결과")
         
+        # ================= [해결 핵심] 폰트 캐시를 무시하고 직접 경로 지정 =================
+        if platform.system() == 'Windows':
+            font_path = 'C:/Windows/Fonts/malgun.ttf'
+        elif platform.system() == 'Darwin':
+            font_path = '/System/Library/Fonts/AppleGothic.ttf'
+        else:
+            # 웹(Streamlit Cloud) 환경에서 packages.txt로 설치된 폰트 경로
+            font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+            
+        # 폰트 프로퍼티 객체 생성
+        if os.path.exists(font_path):
+            font_prop = fm.FontProperties(fname=font_path)
+        else:
+            font_prop = fm.FontProperties() # 백업용
+        # ==================================================================================
+
         # 웹상에 그래프 그리기
         fig, ax = plt.subplots(figsize=(7, 4.5))
         categories = list(st.session_state.metrics.keys())
@@ -190,14 +206,22 @@ else:
         colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A']
         
         bars = ax.bar(categories, scores, color=colors, width=0.5)
+        
+        # 1. 막대 위 점수 텍스트에 폰트 강제 적용
         for bar in bars:
             yval = bar.get_height()
-            ax.text(bar.get_x() + bar.get_width()/2, yval + 2, f'{yval}점', ha='center', va='bottom', fontweight='bold')
+            ax.text(bar.get_x() + bar.get_width()/2, yval + 2, f'{yval}점', 
+                    ha='center', va='bottom', fontweight='bold', fontproperties=font_prop)
 
-        ax.set_title(f"{st.session_state.user_name}({st.session_state.user_mbti})님의 심리 지표", pad=15)
-        ax.set_ylabel("점수 (100점 만점)")
+        # 2. 제목 및 Y축 라벨에 폰트 강제 적용
+        ax.set_title(f"{st.session_state.user_name}({st.session_state.user_mbti})님의 심리 지표", pad=15, fontproperties=font_prop)
+        ax.set_ylabel("점수 (100점 만점)", fontproperties=font_prop)
         ax.set_ylim(0, 110)
         ax.grid(axis='y', linestyle='--', alpha=0.5)
+        
+        # 3. X축 항목(카테고리) 라벨에 폰트 강제 적용
+        ax.set_xticks(range(len(categories)))
+        ax.set_xticklabels(categories, fontproperties=font_prop)
         
         st.pyplot(fig) # 웹 화면에 그래프 출력
         
